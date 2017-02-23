@@ -9,6 +9,9 @@ def getCommentCounts(newsurl):
 	newsid = re.search(r'doc-i(.+).shtml', newsurl).group(1)
 	comments = requests.get('http://comment5.news.sina.com.cn/page/info?version=1&format=js&channel=gn&newsid=comos-'+newsid+'&group=&compress=0&ie=utf-8&oe=utf-8&page=1&page_size=20')
 	js = json.loads(comments.text.strip('var data='))
+	if 'count' not in js['result'].keys():
+		comments = requests.get('http://comment5.news.sina.com.cn/page/info?version=1&format=js&channel=sh&newsid=comos-'+newsid+'&group=&compress=0&ie=utf-8&oe=utf-8&page=1&page_size=20')
+	js = json.loads(comments.text.strip('var data='))
 	if 'count' in js['result'].keys():
 		return js['result']['count']['total']
 	else:return -1
